@@ -1,7 +1,6 @@
 $(document).ready(function() {
 	
 	// VARIABLES
-	var pLocation;	
 	var initialLocation = new google.maps.LatLng(54.20597041662376, -1.812744140625); // map center
    	var myOptions = {
 	 	zoom: 9,

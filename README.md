@@ -23,6 +23,7 @@ Photos
 ------
 
 * Photos from the trip are sourced from Flickr, tagged 'tourofthenorth' and geo-tagged, either automatically or manually using Flickr's map tool.
+* The script uses a number of different API method calls to return the required data.
 * Each image is plotted on the route, and when clicked opens an info window displaying a link to the original photo on Flickr and the author's own profile. 
 
 

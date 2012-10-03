@@ -132,8 +132,9 @@ $(document).ready(function() {
 				
 				// now build the infowindow with all the flickr data in it
 				buildInfoWindow(map, data, item.user, item.id, item.title, photoURL);
-
-				if (i==(total-1)) loader.remove();
+				
+				// if we get to within 3 images of the total, remove the loader
+				if (i==(total-3)) loader.remove();
 			});			
 			
 			

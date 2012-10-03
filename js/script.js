@@ -19,7 +19,28 @@ $(document).ready(function() {
 	}
 	
 	// FUNCTIONS
-	function buildInfoWindow(map, data, userID, itemID, itemTitle, photoURL) {
+	function addTweetMarker(data) {
+		// if tweet has coordinates, create the marker
+		if (data.coordinates) {
+			var marker = new google.maps.Marker({
+		    		position: new google.maps.LatLng(data.geo.coordinates[0], data.geo.coordinates[1]),
+		    		map: map,
+					icon: 'img/friends.png'
+		  	});
+
+			var twitterHandle = data.user.screen_name;
+			
+			// build the window contents
+			var contentString = '<h3><a href="http://twitter.com/' + twitterHandle + '">' + twitterHandle + '</a></h3>' + '<p>' + data.text + '</p>';
+	
+			google.maps.event.addListener(marker, 'click', function() { 
+				infoWindow.open(map,marker);
+				infoWindow.setContent(contentString);	
+	    	});
+		}	
+	}
+	
+	function buildPhotoWindow(map, data, userID, itemID, itemTitle, photoURL) {
 		if(data.stat != 'fail') {
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(data.photo.location.latitude, data.photo.location.longitude),
@@ -40,34 +61,12 @@ $(document).ready(function() {
 			infoWindow.setContent(contentString);	
 		});
 	}
-
-	
-	function addTweetMarker(data) {
-		// if tweet has coordinates, create the marker
-		if (data.coordinates) {
-			var marker = new google.maps.Marker({
-		    		position: new google.maps.LatLng(data.geo.coordinates[0], data.geo.coordinates[1]),
-		    		map: map,
-					icon: 'img/friends.png'
-		  	});
-
-			var twitterHandle = data.user.screen_name;
-			
-			// build the window contents
-			var contentString = '<h3><a href="http://twitter.com/' + twitterHandle + '">'+ twitterHandle + '</a></h3>' + '<p>' + data.text + '</p>';
-	
-			google.maps.event.addListener(marker, 'click', function() { 
-				infoWindow.open(map,marker);
-				infoWindow.setContent(contentString);	
-	    	});
-		}	
-	}
 	
 
 /* PHASE 1: set up the KML layers */
 	
 	loader.text('Loading KML layers');
-	// the file URL parameter rand= is a hack to ensure Google Maps always fetches the newest version of the KML file (remove for production)
+	// the file URL parameter rand= can be used as a hack to ensure Google Maps always fetches the newest version of the KML file (remove for production)
 	var trackLayer1 = new google.maps.KmlLayer('http://strangerpixel.s3.amazonaws.com/tracks/day1.kml', KmlLayerOptions);
 	var trackLayer2 = new google.maps.KmlLayer('http://strangerpixel.s3.amazonaws.com/tracks/day2.kml', KmlLayerOptions); 
 	var trackLayer3 = new google.maps.KmlLayer('http://strangerpixel.s3.amazonaws.com/tracks/day3.kml', KmlLayerOptions);  
@@ -130,7 +129,7 @@ $(document).ready(function() {
 			$.getJSON('http://api.flickr.com/services/rest/?&method=flickr.photos.geo.getLocation&api_key=' + apiKey + '&photo_id=' + photoID + '&format=json&jsoncallback=?', function(data){
 				
 				// now build the infowindow with all the flickr data in it
-				buildInfoWindow(map, data, item.user, item.id, item.title, photoURL);
+				buildPhotoWindow(map, data, item.user, item.id, item.title, photoURL);
 				
 				// if we get to within 3 images of the total, remove the loader
 				if (i==(total-3)) loader.remove();

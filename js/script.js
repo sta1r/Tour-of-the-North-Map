@@ -51,12 +51,12 @@ $(document).ready(function() {
 					icon: 'img/friends.png'
 		  	});
 
+			var twitterHandle = data.user.screen_name;
+			
 			// build the window contents
-			var contentString = '<h3>' + data.user.screen_name + '</h3>' + '<p>' + data.text + '</p>';
+			var contentString = '<h3><a href="http://twitter.com/' + twitterHandle + '">'+ twitterHandle + '</a></h3>' + '<p>' + data.text + '</p>';
 	
 			google.maps.event.addListener(marker, 'click', function() { 
-				//map.setCenter(new google.maps.LatLng(25.2644444, 55.3116667));
-				//map.setCenter(this);
 				infoWindow.open(map,marker);
 				infoWindow.setContent(contentString);	
 	    	});

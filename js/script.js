@@ -95,12 +95,13 @@ $(document).ready(function() {
 	loader.text('Loading photos');
 
 	// Flickr API Key required for requests of >20 photos 
-	var apiKey = '5659e10e7c250c515885e49f7c9da53b';
+	var apiKey = 'b366b86a981a54ec9eea6390d26e3c6a';
 
 	//the initial json request to Flickr
-	$.getJSON('http://api.flickr.com/services/rest/?&method=flickr.photos.search&api_key=' + apiKey + '&tags=tourofthenorth&has_geo=1&format=json&jsoncallback=?', function(data){
+	$.getJSON('https://api.flickr.com/services/rest/?&method=flickr.photos.search&api_key=' + apiKey + '&tags=tourofthenorth&has_geo=1&format=json&jsoncallback=?', function(data){
 		
 		var total = data.photos.total;
+		console.log(total);
 				
 		// the loop		
 		$.each(data.photos.photo, function(i,item){
@@ -114,7 +115,7 @@ $(document).ready(function() {
 			// need to get the user info
 			var ownerID = item.owner;
 
-			$.getJSON('http://api.flickr.com/services/rest/?&method=flickr.people.getInfo&api_key=' + apiKey + '&user_id=' + ownerID + '&format=json&jsoncallback=?', function(data){
+			$.getJSON('https://api.flickr.com/services/rest/?&method=flickr.people.getInfo&api_key=' + apiKey + '&user_id=' + ownerID + '&format=json&jsoncallback=?', function(data){
 				
 				// add username to the item array
 				if (data.person.path_alias) {
@@ -126,7 +127,7 @@ $(document).ready(function() {
 			});
 
 			//use another ajax request to get the geo location data for the image
-			$.getJSON('http://api.flickr.com/services/rest/?&method=flickr.photos.geo.getLocation&api_key=' + apiKey + '&photo_id=' + photoID + '&format=json&jsoncallback=?', function(data){
+			$.getJSON('https://api.flickr.com/services/rest/?&method=flickr.photos.geo.getLocation&api_key=' + apiKey + '&photo_id=' + photoID + '&format=json&jsoncallback=?', function(data){
 				
 				// now build the infowindow with all the flickr data in it
 				buildPhotoWindow(map, data, item.user, item.id, item.title, photoURL);
